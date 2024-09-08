@@ -1,9 +1,9 @@
 package com.example.KvizletApi.Entities;
 
+import jakarta.persistence.*;
 import lombok.Data;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -12,4 +12,8 @@ public class User {
     @Id
     private String username;
     private String password;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user") // Ovo dodaje kolonu user u tabeli Pitanja
+    private List<Pitanje> quizQuestions;
 }

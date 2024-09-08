@@ -25,7 +25,7 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private UserService userService; // Service for user management
+    private UserService userService;
 
     @PostMapping("/authenticate")
     public String authenticate(@RequestBody AuthRequest authRequest) throws AuthenticationException {
@@ -41,11 +41,10 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(@RequestBody AuthRequest authRequest) {
-        // Ensure to create the user with the provided credentials
         User newUser = new User();
         newUser.setUsername(authRequest.getUsername());
-        newUser.setPassword(authRequest.getPassword()); // You should encode the password
-        userService.save(newUser); // Save the new user to the database
+        newUser.setPassword(authRequest.getPassword());
+        userService.save(newUser);
 
         return "User registered successfully";
     }
