@@ -16,10 +16,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -27,6 +26,9 @@ public class SecurityConfig {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private MyUserDetailsService myUserDetailsService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -54,17 +56,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtUtil(), userDetailsService());
-    }
-
-    @Bean
-    public JwtUtil jwtUtil() {
-        return new JwtUtil();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new MyUserDetailsService();
+        return new JwtAuthenticationFilter(jwtUtil, myUserDetailsService);
     }
 
     @Bean
@@ -73,9 +65,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationConfiguration authenticationConfiguration =
-                http.getSharedObject(AuthenticationConfiguration.class);
+    public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 }

@@ -8,11 +8,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
@@ -28,9 +31,9 @@ public class AuthController {
     public String authenticate(@RequestBody AuthRequest authRequest) throws AuthenticationException {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-
         if (authentication.isAuthenticated()) {
-            return jwtUtil.generateToken(authentication);
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            return jwtUtil.generateToken(userDetails);
         }
 
         throw new AuthenticationException("Invalid credentials") {};
