@@ -1,5 +1,6 @@
 package com.example.KvizletApi.Controllers;
 
+import com.example.KvizletApi.Entities.JwtResponse;
 import com.example.KvizletApi.Utils.JwtUtil;
 import com.example.KvizletApi.Entities.User;
 import com.example.KvizletApi.Services.UserService; // Make sure you have a UserService for handling user creation
@@ -28,12 +29,17 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/authenticate")
-    public String authenticate(@RequestBody AuthRequest authRequest) throws AuthenticationException {
+    public JwtResponse authenticate(@RequestBody AuthRequest authRequest) throws AuthenticationException {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         if (authentication.isAuthenticated()) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            return jwtUtil.generateToken(userDetails);
+            String token = jwtUtil.generateToken(userDetails);
+
+            // Fetch user details
+            User user = userService.findByUsername(authRequest.getUsername());
+
+            return new JwtResponse(token, user);
         }
 
         throw new AuthenticationException("Invalid credentials") {};
