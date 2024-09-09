@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private Button logoutButton;
+    private ImageView addImageView;
+
     private PitanjeAdapter pitanjeAdapter;
     private PitanjaService pitanjaService;
 
@@ -66,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
                         List<Pitanje> pitanja = response.body();
                         pitanjeAdapter = new PitanjeAdapter(pitanja, MainActivity.this);
                         recyclerView.setAdapter(pitanjeAdapter);
+                    } else if (response.code() == 401) {
+                        // Unauthorized, redirect to login
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
                     } else {
                         Toast.makeText(MainActivity.this, "Failed to load questions", Toast.LENGTH_SHORT).show();
                     }
@@ -76,6 +84,11 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
+        }else{
+            // Token or username is null, redirect to login
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         }
 
 
@@ -94,10 +107,16 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        addImageView.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AddQuestionActivity.class); // Make sure AddQuestionActivity exists
+            startActivity(intent);
+        });
     }
 
     private void initViews() {
         recyclerView = findViewById(R.id.recyclerView);
         logoutButton = findViewById(R.id.logoutButton);
+        addImageView = findViewById(R.id.addImageView);
     }
 }

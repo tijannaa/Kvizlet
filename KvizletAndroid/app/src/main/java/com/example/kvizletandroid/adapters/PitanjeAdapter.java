@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.kvizletandroid.AddQuestionActivity;
 import com.example.kvizletandroid.EditQuestionActivity;
 import com.example.kvizletandroid.R;
 import com.example.kvizletandroid.models.Pitanje;
@@ -68,6 +69,7 @@ public class PitanjeAdapter extends RecyclerView.Adapter<PitanjeAdapter.ViewHold
                     .setNegativeButton("No", null)
                     .show();
         });
+
     }
 
     private void deleteQuestion(Long id) {

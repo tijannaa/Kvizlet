@@ -2,6 +2,7 @@ package com.example.kvizletandroid;
 
 import static com.example.kvizletandroid.Utils.BASE_URL;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText usernameEditText, passwordEditText;
     private Button registerButton;
+    private Button loginButton;
+
     private AuthService authService;
 
     @Override
@@ -53,6 +56,9 @@ public class RegisterActivity extends AppCompatActivity {
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
                         Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
                     } else {
                         Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
                     }
@@ -64,11 +70,18 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             });
         });
+
+        loginButton.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void initViews() {
         usernameEditText = findViewById(R.id.usernameEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         registerButton = findViewById(R.id.registerButton);
+        loginButton = findViewById(R.id.loginButton);
     }
 }
