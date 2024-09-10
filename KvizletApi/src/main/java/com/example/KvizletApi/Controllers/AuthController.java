@@ -32,6 +32,7 @@ public class AuthController {
     public JwtResponse authenticate(@RequestBody AuthRequest authRequest) throws AuthenticationException {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+
         if (authentication.isAuthenticated()) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String token = jwtUtil.generateToken(userDetails);

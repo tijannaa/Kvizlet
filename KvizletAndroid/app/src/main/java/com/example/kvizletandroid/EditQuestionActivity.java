@@ -38,9 +38,8 @@ public class EditQuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_question);
 
-        questionEditText = findViewById(R.id.questionEditText);
-        answerEditText = findViewById(R.id.answerEditText);
-        saveButton = findViewById(R.id.saveButton);
+        initViews();
+        initListeners();
 
         questionId = getIntent().getLongExtra("QUESTION_ID", -1L);
 
@@ -63,6 +62,10 @@ public class EditQuestionActivity extends AppCompatActivity {
         // Fetch the current question details
         fetchQuestionDetails(questionId);
 
+
+    }
+
+    private void initListeners() {
         saveButton.setOnClickListener(v -> {
             String updatedQuestion = questionEditText.getText().toString().trim();
             String updatedAnswer = answerEditText.getText().toString().trim();
@@ -104,6 +107,12 @@ public class EditQuestionActivity extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    private void initViews() {
+        questionEditText = findViewById(R.id.questionEditText);
+        answerEditText = findViewById(R.id.answerEditText);
+        saveButton = findViewById(R.id.saveButton);
     }
 
     private void fetchQuestionDetails(Long id) {

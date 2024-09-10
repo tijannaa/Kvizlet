@@ -32,10 +32,11 @@ public class AddQuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_question);
 
-        questionEditText = findViewById(R.id.questionEditText);
-        answerEditText = findViewById(R.id.answerEditText);
-        saveButton = findViewById(R.id.saveButton);
+        initViews();
+        initListeners();
+    }
 
+    private void initListeners() {
         saveButton.setOnClickListener(v -> {
             String questionText = questionEditText.getText().toString().trim();
             String answerText = answerEditText.getText().toString().trim();
@@ -81,5 +82,11 @@ public class AddQuestionActivity extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    private void initViews() {
+        questionEditText = findViewById(R.id.questionEditText);
+        answerEditText = findViewById(R.id.answerEditText);
+        saveButton = findViewById(R.id.saveButton);
     }
 }
